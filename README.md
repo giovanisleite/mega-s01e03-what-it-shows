@@ -5,7 +5,7 @@ one fix queued. Read by what each report shows, #4471 holds three problems:
 
 | problem | reports | ticket |
 |---|---|---|
-| `parser`: day and month swapped, any channel | 374 | #1 |
+| `parser`: day and month swapped, any channel | 379 (desk count; 374 show the swap, 5 are the one-day moves of #3) | #1 |
 | `hint`: day and month swapped, booking-v3 form only | 33 | #2 |
 | `shift`: date one day early (time zone) | 5 | #3 |
 

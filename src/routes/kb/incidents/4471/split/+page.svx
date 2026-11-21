@@ -1,0 +1,65 @@
+---
+layout: runbook
+title: '#4471, split: three problems, not one'
+owner: giovanisleite
+status: draft
+reviewed: 2026-11-21
+signature: giovanisleite
+---
+
+<script>
+  import ProblemTable from '#lib/kb/ProblemTable.svelte';
+  import CauseTable from '#lib/kb/CauseTable.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+
+  const issues = {
+    parser: 'https://github.com/giovanisleite/mega-s01e03-what-it-shows/issues/1',
+    hint: 'https://github.com/giovanisleite/mega-s01e03-what-it-shows/issues/2',
+    shift: 'https://github.com/giovanisleite/mega-s01e03-what-it-shows/issues/3',
+  };
+</script>
+
+[#4471](/kb/incidents/4471) says one bug, one fix queued. Its reports say otherwise. The desk
+merged them by subject line ([decision 0001](/kb/decisions/0001-dedupe-by-subject)), and many
+different subjects can describe one bug while one subject can describe two. This page counts by
+what each report shows, so every problem gets its own ticket.
+
+<Callout kind="warn">
+The queued parser fix closes only the first row. The other rows need fixes of their own, and
+until they ship, those reports keep coming in.
+</Callout>
+
+## What #4471 holds
+
+<ProblemTable ticket={4471} {issues} />
+
+## How to tell them apart
+
+- **`parser`**: the shared parser reads every date month first, and every tenant on file writes
+  the day first. Day and month come out swapped: 7 April becomes 4 July. Any channel. Fix: parse
+  with the tenant's locale.
+- **`hint`**: same swap, different bug. The booking-v3 form prints `MM/DD/YYYY` under its date
+  field, so the tenant's people type month first, and the form reads it the tenant's way. Only
+  form reports from tenants on booking-v3. The parser fix does not touch it. Fix: print the
+  tenant's own order under the field.
+- **`shift`**: not a swap at all. The date lands **one day early**: Tuesday 12 May shows as
+  Monday 11 May, a client in Toronto gets Monday while Lisbon gets Tuesday, an invite arrives
+  before the booking was made. A date stored as midnight and shown in a zone west of it. The
+  desk read these right (`oneDayMove` in `desk-notes.json`), and the cause table still counts
+  them under `parser` by tenant: R-41202, R-41209, R-41236, R-41344, R-41620.
+
+## What the cause table shows
+
+The cause table on #4471 places a report by tenant and channel only. It cannot see what a body
+says, so it folds the one-day reports into `parser` and leaves them as a footnote:
+
+<CauseTable ticket={4471} />
+
+## For the desk
+
+- Do not close #4471 when the parser fix ships. Check the other rows first.
+- New reports with a one-day move go to the `shift` ticket, not here.
+- Intake's tag is a guess from the reporter's browser. Place by tenant, channel and body.
+
+<RenderStamp {signature} />

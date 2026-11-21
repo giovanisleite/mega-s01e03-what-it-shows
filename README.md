@@ -1,3 +1,22 @@
+# S01E03 · what it shows — #4471, split
+
+The support desk merged 412 date reports into one ticket, #4471, and marked it known: one bug,
+one fix queued. Read by what each report shows, #4471 holds three problems:
+
+| problem | reports | ticket |
+|---|---|---|
+| `parser`: day and month swapped, any channel | 374 | #1 |
+| `hint`: day and month swapped, booking-v3 form only | 33 | #2 |
+| `shift`: date one day early (time zone) | 5 | #3 |
+
+- New kb page: [`src/routes/kb/incidents/4471/split/+page.svx`](src/routes/kb/incidents/4471/split/+page.svx)
+- Its logic: [`src/lib/kb/problems.ts`](src/lib/kb/problems.ts), [`src/lib/kb/ProblemTable.svelte`](src/lib/kb/ProblemTable.svelte)
+- The page as the desk sees it: [`rendered/kb/incidents/4471/split.html`](rendered/kb/incidents/4471/split.html)
+
+Build: `npm install && npm run build` (SvelteKit + mdsvex, static output in `build/`).
+
+---
+
 # kb — the support knowledge base
 
 **kb** = knowledge base. What the support desk knows about how our products break, written
